@@ -1,6 +1,6 @@
 export * from './constants'; //this syntax does not work with export default
 
-export const setItemInLocalStorage = (value, key) => {
+export const setItemInLocalStorage = (key, value) => {
     if(!key || !value) {
         console.error('Cannot store in LS');
     }
@@ -11,12 +11,12 @@ export const setItemInLocalStorage = (value, key) => {
 };
 
 
-export const getItemInLocalStorage = (key) => {
+export const getItemFromLocalStorage = (key) => {
     if(!key) {
         console.error('Cannot get the value from LS');
     }
 
-    localStorage.getItem(key);
+    return localStorage.getItem(key);
 };
 
 

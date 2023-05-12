@@ -1,8 +1,27 @@
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
+import { getPosts } from '../api';
 
 import styles from '../styles/home.module.css';
 
-const Home = ({posts}) => {
+const Home = () => {
+
+  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+
+    const fetchPosts = async () => {
+      const response = await getPosts();
+      console.log('response', response);
+      if(response.success){
+        setPosts(response.data.posts);
+      }
+      setLoading(false);
+    };
+    fetchPosts();
+  }, []);
+
     console.log(posts)
     return (
     <div className= {styles.postsList}>
@@ -45,8 +64,8 @@ const Home = ({posts}) => {
 //this is done in case someone passed a string as props instead of array and in that case
 // map function won't work. So doing this will throw an error and we can debug it afterwards. 
 
-Home.propTypes = {
-    posts: PropTypes.array.isRequired
-}
+// Home.propTypes = {
+//     posts: PropTypes.array.isRequired
+// }
 
 export default Home;

@@ -12,7 +12,7 @@ const initialState = { //defining the initial structure of that state
 export const AuthContext = createContext(initialState) //created the global state by passing initial state to createContext. 
                                                        
 export const AuthProvider = ({ children }) => {
-    const auth = useProvideAuth(); //useProvideAuth is a custom hook whose state will be grabbed by auth const. 
+    const auth = useProvideAuth(); //useProvideAuth is a custom hook
 
     return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
 } 
