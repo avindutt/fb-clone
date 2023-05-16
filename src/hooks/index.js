@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import jwt from 'jwt-decode';
 import { AuthContext } from "../providers/AuthProvider";
-import { register, login as userLogin} from "../api";
+import { editProfile, register, login as userLogin} from "../api";
 import { setItemInLocalStorage, LOCALSTORAGE_TOKEN_KEY, removeItemFromLocalStorage, getItemFromLocalStorage } from "../utils";
 
 export const useAuth = () => { //another custom hook so that we don't have to write useContext everytime.
@@ -23,8 +23,22 @@ export const useProvideAuth = () => {
       setLoading(false);
 
     }, [])
-    
 
+    const updateUser = async(userId, name, password, confirmPassword) => {
+        const response = await editProfile(userId, name, password, confirmPassword);
+        if(response.success) {
+            setUser(response.data.user);
+            return {
+                success : true
+            }
+        } else {
+            return {
+                success : false,
+                message : response.message
+            }
+        }
+    }
+    
     const login = async (email, password) => {
         const response = await userLogin(email, password);
 
@@ -67,7 +81,8 @@ export const useProvideAuth = () => {
         login,
         logout,
         loading,
-        signup
+        signup,
+        updateUser
     }
 // so basically this useProvideAuth returns objects which are just functions, nothing else and a context has been created
 // for these functions as a state which will be used by the components to hit the API

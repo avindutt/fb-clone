@@ -2,6 +2,7 @@ import { useToasts } from 'react-toast-notifications';
 import styles from '../styles/login.module.css';
 import { useState } from 'react';
 import { useAuth } from '../hooks';
+import { useNavigate, Navigate } from 'react-router-dom';
 
 const Login = () => {
 
@@ -10,6 +11,7 @@ const Login = () => {
     const [loggingIn, setloggingIn] = useState(false);
     const { addToast } = useToasts();
     const auth = useAuth();
+    const navigate = useNavigate(); 
     console.log(auth)
 
     const handleSubmit = async(e) => {
@@ -27,10 +29,16 @@ const Login = () => {
 
         if(response.success) {
             addToast('Successfully logged in', {appearance: 'success'});
+            // navigate('/');
+            <Navigate to={'/'}/>
         } else {
             addToast(response.message, {appearance: 'error'});
         }
         setloggingIn(false);
+    };
+
+    if(auth.user) {
+      return <Navigate to={'/'}/>
     };
 
     return(

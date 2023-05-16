@@ -1,18 +1,31 @@
-import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { getPosts } from "../api";
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { Home, Login } from "../pages";
 import Navbar from "./Navbar";
 import Loader from './Loader';
+import UserProfile from "../pages/UserProfile";
+import Settings from "../pages/Settings";
 import Signup from '../pages/Signup'
 import { useAuth } from "../hooks";
+import { element } from "prop-types";
+import React, { useEffect } from "react";
 
-const About = () => {
-  return <h1>About</h1>
-}
+const PrivateRoute = (props) => { // children are the components inside the private route and rest is the any other props coming from react router dom
+  const {Component} = props;
+  const auth = useAuth();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    if (!auth.user) {
+      navigate('/login');
+    };
+  })
 
-const UserInfo = () => {
-  return <h1>UserInfo</h1>
+    return (
+      <>
+      <Component/>
+      </>
+    )
+  
 }
 
 const Page404 = () => {
@@ -41,27 +54,26 @@ function App() {
   }
 
   return (
-    <div className="App">
-      
+    <>
       <Router>
       <Navbar/>
 
           <Routes>
-          <Route exact path="/" element = {<Home/>} />
+          <Route path="/" element = {<PrivateRoute Component={Home}/>} />
 
-          {/* <Route exact path="/about" element = {<About/>} /> */}
+          <Route path="/login" element = {<Login/>} />
 
-          <Route exact path="/login" element = {<Login/>} />
+          <Route path="/register" element={<Signup/>} />
 
-          {/* <Route exact path="/user/asdasd" element = {<UserInfo/>} /> */}
+          <Route path="/settings" element={<PrivateRoute Component={Settings}/>}/>
 
-          <Route exact path="/register" element={<Signup/>}></Route>
+          <Route path="/user/:userId" element={<PrivateRoute Component={UserProfile}/>}/>
 
           <Route path="*" element = { <Page404/> } />
           </Routes>
 
       </Router>
-    </div>
+    </>
   );
 }
 

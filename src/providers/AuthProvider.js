@@ -6,7 +6,9 @@ const initialState = { //defining the initial structure of that state
     user: null,
     login: () => {},
     logout: () => {},
-    loading: true
+    loading: true,
+    signup: () => {},
+    updateUser: () => {}
 };
 
 export const AuthContext = createContext(initialState) //created the global state by passing initial state to createContext. 
